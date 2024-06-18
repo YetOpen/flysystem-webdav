@@ -196,8 +196,8 @@ class WebDAVAdapter extends AbstractAdapter
         $newLocation = $this->applyPathPrefix($this->encodePath($newpath));
 
         try {
-            $response = $this->client->request('MOVE', '/'.ltrim($location, '/'), null, [
-                'Destination' => '/'.ltrim($newLocation, '/'),
+            $response = $this->client->request('MOVE', $location, null, [
+                'Destination' => $this->client->getAbsoluteUrl($newLocation),
             ]);
 
             if ($response['statusCode'] >= 200 && $response['statusCode'] < 300) {
@@ -369,6 +369,7 @@ class WebDAVAdapter extends AbstractAdapter
             if ($response['statusCode'] >= 200 && $response['statusCode'] < 300) {
                 return true;
             }
+
         } catch (NotFound $e) {
             // Would have returned false here, but would be redundant
         }
